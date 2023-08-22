@@ -25,6 +25,8 @@ fun increment 2 !
   call increment
   pop test
 
-print test
+!
+  push test
+  call print
 
 print 241
