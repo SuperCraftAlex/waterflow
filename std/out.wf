@@ -1,0 +1,67 @@
+use std/std.wf
+
+
+>> simple i/o
+
+fun putch 1 !
+  magic 0
+
+fun flush 0 !
+  magic 1
+
+
+>> number reverse (base 10 int)
+var reverse__sum 0
+var reverse__out 0
+
+fun reverse__loop 0 !
+  push reverse__out
+  push 10
+  mul
+
+  push reverse__sum
+  push 10
+  mod
+  
+  add
+  pop reverse__out
+
+  push reverse__sum
+  push 10
+  div
+  icv
+  pop reverse__sum
+
+fun reverse 1 %
+  single 0 >reverse__out
+  single A0 >reverse__sum
+  while reverse__sum reverse__loop
+  single reverse__out >R  
+
+
+>> number print (base 10 int)
+var print__sum 0
+var print__digit 0
+
+fun print__loop 0 !
+  push print__sum
+  push 10
+  mod
+  push 48
+  add
+  call putch
+  push print__sum
+  push 10
+  div
+  icv
+  pop print__sum
+
+fun print 1 %
+  !
+    push A0
+    icv
+    pop print__sum
+  reverse print__sum >print__sum
+  while print__sum print__loop
+  putch 10
+  flush
