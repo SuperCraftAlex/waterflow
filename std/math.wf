@@ -1,0 +1,28 @@
+use std/std.wf
+
+
+fun add 2 !
+  fadd
+
+fun sub 2 !
+  fsub
+
+fun mul 2 !
+  fmul
+
+fun div 2 !
+  fdiv
+
+fun mod 2 !
+  mod
+
+
+fun eq 2 !
+  sub
+  poc
+  not
+  puc
+
+fun neq 2 !
+  sub
+

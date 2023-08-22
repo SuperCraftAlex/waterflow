@@ -106,7 +106,7 @@ def exec_stack(block, stack):
       if len(args) != 0:
         print("too many arguments for not instruction!")
         continue
-      cond = 1-cond
+      cond = cond != 1
       continue
 
     if inst == "pass":
@@ -145,6 +145,16 @@ def exec_stack(block, stack):
         print("stack underflow! -> end stack-block")
         return stack[:sp+1]
       (stack[sp-1], stack[sp]) = (stack[sp], stack[sp-1])
+      continue
+
+    if inst == "abs":
+      if len(args) != 0:
+        print("too many arguments for dup instruction!")
+        continue
+      if sp < 0:
+        print("stack underflow! -> end stack-block")
+        return stack[:sp+1]
+      stack[sp] = abs(stack[sp])
       continue
 
     if inst == "dup":
