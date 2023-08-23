@@ -1,5 +1,7 @@
 import sys
 import os
+import random
+import string
 
 from stack import exec_stack
 from cmd.cmd import cmds_single
@@ -31,6 +33,8 @@ proci = []
 
 pval = lambda s: float(s) if is_float(s) else (vars[s] if s in vars.keys() else (consts[s] if s in consts.keys() else sys.float_info.min))
 
+gen_anon_name = lambda: "__anonymus_" + ''.join(random.sample(string.ascii_lowercase, 8))
+
 def exec(last_ind, lines):
   global vars
   global funs
@@ -40,6 +44,7 @@ def exec(last_ind, lines):
   for i, line in enumerate(lines):
     if line.strip().startswith(">>"):
       continue
+    line = line.split(">>")[0]
     if len(line.strip()) == 0:
       continue
     ind = len(line) - len(line.lstrip())
@@ -49,22 +54,30 @@ def exec(last_ind, lines):
 
     if len(block) > 0:
       blocki = len(block[0]) - len(block[0].lstrip())
-      cmd = last.split(" ")
+      cmd = last.strip().split(" ")
       args = cmd[1:]
       cmd = cmd[0]
 
-      if cmd in cmds_block.keys():
-        r = cmds_block[cmd](cmd, args, block, funs, vars, consts, exec_stack, exec, pval)
-      else:
-        print("Command / function \"" + cmd + "\" not found!")
+      block = list(map(lambda x: x[blocki:], block))
 
-      block = []
+      if cmd in cmds_block.keys():
+        r = cmds_block[cmd](cmd, args, block[:], funs, vars, consts, exec_stack, exec, pval)
+      else:
+        if len(args) > 0 and cmd in cmds_single.keys():
+          c = cmds_single[cmd]
+          name = gen_anon_name()
+          funs[name] = (-1, args[-1], block[:])
+          c(cmd, args[:-1] + [name], funs, vars, consts, exec_stack, exec, pval)
+        else:
+          print("Command / function \"" + cmd + "\" not found!")
+
+      block.clear()
 
     line = line.strip()
     last = line
     last_ind = ind
 
-    cmd = last.split(" ")
+    cmd = line.split(" ")
     args = cmd[1:]
     cmd = cmd[0]
 
@@ -78,77 +91,6 @@ def exec(last_ind, lines):
 
     if cmd in cmds_single.keys():
       r = cmds_single[cmd](cmd, args, funs, vars, consts, exec_stack, exec, pval)
-      continue
-
-    if cmd == "const":
-      if len(args) < 1 or len(args) > 2:
-        print("invalid amount of arguments for const command!")
-        continue
-      if len(args[0]) < 3:
-        print("constant names need to be at least 3 chars!")
-        continue
-      if args[0] in consts.keys():
-        print("cannot redefine constants!")
-        continue
-      if len(args) == 2:
-        consts[args[0]] = pval(args[1])
-      else:
-        consts[args[0]] = pval(args[1])
-      continue
-
-    if cmd == "while":
-      # while the variable is > 0
-      if len(args) != 2:
-        print("invalid amount of arguments for while command!")
-        continue
-      if len(args[1]) == 1:
-        continue
-      if not args[1] in funs.keys():
-        print("cannot execute while command with undefined function!")
-        continue
-      fun = funs[args[1]]
-      if fun[0] > 0:
-        print("can only use function with 0 arguments in while command!")
-        continue
-      if fun[1] == "!":
-        while True:
-          if pval(args[0]) == 0:
-            break
-          exec_stack(fun[2], [], pval, exec, funs, vars, consts)
-      elif fun[1] == "%":
-        while True:
-          if pval(args[0]) == 0:
-            break
-          exec(0, fun[2])
-      else:
-        print("invalid function type for while command!")
-      continue
-
-    if cmd == "times":
-      # if a true (=1) is on the stack, the loop breaks
-      if len(args) != 2:
-        print("invalid amount of arguments for times command!")
-        continue
-      if not args[0] in vars.keys():
-        print("cannot execute times command with undefined variable!")
-        continue
-      if not args[1] in funs.keys():
-        print("cannot execute times command with undefined function!")
-        continue
-      am = vars[args[0]]
-      fun = funs[args[1]]
-      if fun[0] > 0:
-        print("can only use function with 0 arguments in times command!")
-        continue
-      if fun[1] != "!":
-        print("can only use stack based functions in times command!")
-        continue
-      for i in range(int(am)):
-        vars[args[0]] = i
-        stack = exec_stack(fun[2], [], pval, exec, funs, vars, consts)
-        if len(stack) > 0 and stack[-1] == 1:
-          break
-      vars[args[0]] = am
       continue
 
     if cmd in funs.keys():
@@ -179,6 +121,7 @@ def exec(last_ind, lines):
           sp -= 1
         continue
       if fun[1] == "%":
+        oldr = vars["R"] if "R" in vars.keys() else False
         vars["R"] = 0.0
         for i, arg in enumerate(args):
           vars["A"+str(i)] = pval(arg)
@@ -191,22 +134,34 @@ def exec(last_ind, lines):
             print("cannot pop into variable: undefined variable: " + outs[0] + "!")
             continue
           vars[outs[0]] = vars["R"]
+        if oldr == False:
+          del vars["R"]
+        else:
+          vars["R"] = oldr
         continue
       print("Invalid code block type " + fun[1] + " of function " + cmd + "!")
 
-    print("command not found: " + cmd + "!")
+    print("Command not found: " + cmd + "!")
 
   if len(block) > 0:
     blocki = len(block[0]) - len(block[0].lstrip())
-    cmd = last.split(" ")
+    cmd = last.strip().split(" ")
     args = cmd[1:]
     cmd = cmd[0]
 
-    if cmd in cmds_block.keys():
-      r = cmds_block[cmd](cmd, args, block, funs, vars, consts, exec_stack, exec, pval)
-    else:
-      print("command / function " + cmd + " not found!")
+    block = list(map(lambda x: x[blocki:], block))
 
-    block = []
+    if cmd in cmds_block.keys():
+      r = cmds_block[cmd](cmd, args, block[:], funs, vars, consts, exec_stack, exec, pval)
+    else:
+      if len(args) > 0 and cmd in cmds_single.keys():
+        c = cmds_single[cmd]
+        name = gen_anon_name()
+        funs[name] = (-1, args[-1], block[:])
+        c(cmd, args[:-1] + [name], funs, vars, consts, exec_stack, exec, pval)
+      else:
+        print("Command / function \"" + cmd + "\" not found!")
+
+    block.clear()
 
 exec(0, txt.split("\n"))

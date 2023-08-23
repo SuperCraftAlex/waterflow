@@ -10,12 +10,13 @@ def block(cmd, args, block, funs, vars, consts, exec_stack, exec, pval):
     print("Function \"" + name + "\" is already defined!")
     return False
 
+  if argl == "*":
+    argl = "-1"
+
   if not argl.isnumeric():
-    print("Function argument length needs to be number!")
+    print("Function argument length needs to be number or a specifc argument length specifier!")
     return False
 
-  ind0 = len(block[0]) - len(block[0].lstrip())
-
-  funs[args[0]] = (int(argl), args[2], list(map(lambda x: x[ind0:], block)))
+  funs[args[0]] = (int(argl), args[2], block)
 
   return True

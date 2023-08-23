@@ -1,0 +1,11 @@
+use std/out
+
+!
+  push 1
+  call print
+  dump
+
+var iter 9
+
+times iter %
+  print iter

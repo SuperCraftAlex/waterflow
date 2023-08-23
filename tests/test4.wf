@@ -1,0 +1,11 @@
+use std/out
+
+const TRUE 1
+
+var test
+
+! push 1 >test
+
+while TRUE %
+  print 1
+

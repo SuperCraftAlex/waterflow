@@ -1,0 +1,12 @@
+fun sub 2 !
+  sub
+
+
+var test 10
+
+sub test 2 >test
+
+!
+  push test
+  dump
+

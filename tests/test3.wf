@@ -1,0 +1,17 @@
+use std/std.wf
+use std/out.wf
+
+var val_a 3
+var val_b 2
+
+fun aEqB 0 %
+  print 99
+
+!
+  push val_a
+  push val_b
+  sub
+  poc
+  not
+  call aEqB
+  sec

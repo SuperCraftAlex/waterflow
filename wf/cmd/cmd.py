@@ -4,13 +4,17 @@ import cmd.undef
 import cmd.use
 import cmd.var
 import cmd.const
+import cmd.whil_e
+import cmd.times
 
 cmds_single = {
   "!":      cmd.stack_exec.single,
   "undef":  cmd.undef.single,
   "use":    cmd.use.single,
   "var":    cmd.var.single,
-  "const":  cmd.const.single
+  "const":  cmd.const.single,
+  "while":  cmd.whil_e.single,
+  "times":  cmd.times.single
 }
 
 cmds_block = {

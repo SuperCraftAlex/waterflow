@@ -1,0 +1,12 @@
+use std/out
+
+fun notfun 1 %
+  ! A0> >A0
+
+fun aa 1 %
+  notfun A0
+
+!
+  push 1
+  call aa
+  dump

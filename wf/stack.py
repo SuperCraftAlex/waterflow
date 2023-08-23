@@ -254,6 +254,7 @@ def exec_stack(block, stack, pval, exec, funs, vars, consts):
         sp = len(stack) - 1
         stack += [0.0] * (255 - len(stack))
       elif type == "%":
+        oldr = vars["R"] if "R" in vars.keys() else False
         vars["R"] = "_"
         for i in range(fun[0]):
           if sp < 0:
@@ -265,6 +266,10 @@ def exec_stack(block, stack, pval, exec, funs, vars, consts):
         if vars["R"] != "_":
           sp += 1
           stack[sp] = vars["R"]
+        if oldr == False:
+          del vars["R"]
+        else:
+          vars["R"] = oldr
       else:
         print("Unsupported function execution type!")
       continue
