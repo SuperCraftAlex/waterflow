@@ -39,14 +39,14 @@ def exec_stack(block, stack):
 
     if inst == "sec":
       if len(args) != 0:
-        print("too many arguments for sec instruction!")
+        err("too many arguments for sec instruction!")
         continue
       cond = True
       continue
 
     if inst == "clc":
       if len(args) != 0:
-        print("too many arguments for clc instruction!")
+        err("too many arguments for clc instruction!")
         continue
       cond = False
       continue
@@ -315,7 +315,7 @@ def exec_stack(block, stack):
       if len(args) != 1:
         print("invalid amount of arguments for magic instructuion!")
         continue
-      val = int(args[0])
+      val = int(pval(args[0]))
       if val == 0: # putchar
         sys.stdout.write(chr(int(stack[sp])))
         sp -= 1
@@ -433,6 +433,7 @@ def exec(last_ind, lines):
         consts[args[0]] = pval(args[1])
       else:
         consts[args[0]] = pval(args[1])
+      continue
 
     if cmd == "while":
       # while the variable is > 0

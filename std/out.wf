@@ -3,11 +3,11 @@ use std/magic.wf
 
 
 >> simple i/o
-fun putch 1 %
-  magic_putchar A0
+fun putch 1 !
+  magic MAGIC_PUTCHAR
 
-fun flush 0 %
-  magic_flush
+fun flush 0 !
+  magic MAGIC_FLUSH
 
 
 >> number reverse (base 10 int)
