@@ -1,13 +1,13 @@
 use std/std.wf
+use std/magic.wf
 
 
 >> simple i/o
+fun putch 1 %
+  magic_putchar A0
 
-fun putch 1 !
-  magic 0
-
-fun flush 0 !
-  magic 1
+fun flush 0 %
+  magic_flush
 
 
 >> number reverse (base 10 int)

@@ -1,0 +1,7 @@
+>> this stdlib file is defined by the compiler / transpiler / interpreter and should not be packed with other stdlib files!
+
+fun magic_putchar 1 !
+  magic 0
+
+fun magic_flush 0 !
+  magic 1

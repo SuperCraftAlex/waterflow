@@ -13,21 +13,13 @@ else:
 
 vars = {}
 funs = {} # dict<name: string, tuple<args: int, type: string, block: list<string>>>
+consts = {}
 
 is_float = lambda s: s.replace(".", "").isnumeric()
 
 proci = []
 
-def pval(s):
-  global vars
-
-  if is_float(s):
-    return float(s)
-
-  if s in vars.keys():
-    return vars[s]
-
-  return sys.float_info.min
+pval = lambda s: float(s) if is_float(s) else (vars[s] if s in vars.keys() else (consts[s] if s in consts.keys() else sys.float_info.min))
 
 def exec_stack(block, stack):
   global vars
@@ -383,9 +375,22 @@ def exec(last_ind, lines):
     args = cmd[1:]
     cmd = cmd[0]
 
+    if cmd == "undef":
+      if len(args) != 1:
+        print("invalid amount of arguments for undef command!")
+        continue
+      v = args[0]
+      if v in vars:
+        del vars[v]
+      if v in consts:
+        del consts[v]
+      if v in funs:
+        del funs[v]
+
     if cmd == "use":
       if len(args) != 1:
-        print("invalid´amount of arguments for use command!")
+        print("invalid amount of arguments for use command!")
+        continue
       qerr = args[0]
       if qerr.startswith("std/"):
         qerr = os.path.join(stdp, qerr[4:])
@@ -399,22 +404,42 @@ def exec(last_ind, lines):
       continue
 
     if cmd == "var":
-      if len(args) != 2:
+      if len(args) < 1 or len(args) > 2:
         print("invalid amount of arguments for var command!")
         continue
       if len(args[0]) < 3:
         print("variable names need to be at least 3 chars!")
         continue
-      vars[args[0]] = int(args[1])
+      if args[0] in vars.keys():
+        print("cannot redefine variables!")
+        continue
+      if len(args) == 2:
+        vars[args[0]] = pval(args[1])
+      else:
+        vars[args[0]] = 0.0
       continue
+
+    if cmd == "const":
+      if len(args) < 1 or len(args) > 2:
+        print("invalid amount of arguments for const command!")
+        continue
+      if len(args[0]) < 3:
+        print("constant names need to be at least 3 chars!")
+        continue
+      if args[0] in consts.keys():
+        print("cannot redefine constants!")
+        continue
+      if len(args) == 2:
+        consts[args[0]] = pval(args[1])
+      else:
+        consts[args[0]] = pval(args[1])
 
     if cmd == "while":
       # while the variable is > 0
       if len(args) != 2:
         print("invalid amount of arguments for while command!")
         continue
-      if not args[0] in vars.keys():
-        print("cannot execute while command with undefined variable!")
+      if len(args[1]) == 1:
         continue
       if not args[1] in funs.keys():
         print("cannot execute while command with undefined function!")
@@ -423,13 +448,18 @@ def exec(last_ind, lines):
       if fun[0] > 0:
         print("can only use function with 0 arguments in while command!")
         continue
-      if fun[1] != "!":
-        print("can only use stack based functions in while command!")
-        continue
-      while True:
-        if vars[args[0]] == 0:
-          break
-        stack = exec_stack(fun[2], [])
+      if fun[1] == "!":
+        while True:
+          if pval(args[0]) == 0:
+            break
+          exec_stack(fun[2], [])
+      elif fun[1] == "%":
+        while True:
+          if pval(args[0]) == 0:
+            break
+          exec(0, fun[2])
+      else:
+        print("invalid function type for while command!")
       continue
 
     if cmd == "times":
