@@ -9,4 +9,5 @@ fun aa 1 %
 !
   push 1
   call aa
+  assert_sp -1
   dump

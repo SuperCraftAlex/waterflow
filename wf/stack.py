@@ -1,6 +1,8 @@
 import sys
 
 def exec_stack(block, stack, pval, exec, funs, vars, consts):
+  err = print
+
   cond = 1.0
 
   # sp points to the current top element in the stack
@@ -15,6 +17,25 @@ def exec_stack(block, stack, pval, exec, funs, vars, consts):
     inst = inst.strip().split(" ")
     args = inst[1:]
     inst = inst[0]
+
+    if inst == "assert_sp":
+      if len(args) != 1:
+        err("invalid arguments for assert_sp instruction!")
+        continue
+      if sp != int(args[0]):
+        err("assert_sp failed!")
+      continue
+
+    if inst == "assert_top":
+      if len(args) != 1:
+        err("invalid arguments for assert_top instruction!")
+        continue
+      if sp < 0:
+        err("assert_top failed!")
+        continue
+      if float(stack[sp]) != float(args[0]):
+        err("assert_top failed!")
+      continue
 
     if inst == "sec":
       if len(args) != 0:

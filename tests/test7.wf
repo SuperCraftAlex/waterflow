@@ -1,0 +1,6 @@
+use std/out
+
+assert_def print
+assert_def putch
+
+
