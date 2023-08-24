@@ -7,35 +7,16 @@ const FALSE 0
 
 
 >> print booleans
-ifpath std/out %
+ifdef print %
   fun print_bool 1 %
-    var print_bool__eq
-    var print_bool__neq
-
-    eq A0 1 >print_bool__eq
-    not print_bool__eq >print_bool__neq
-
-    if print_bool__eq %
+    const print_bool__c (eq A0 1)
+    if print_bool__c %
       putch 84
-    if print_bool__neq %
+    if (not print_bool__c) %
       putch 70
     flush
 
-    undef print_bool__eq
-    undef print_bool__neq
-
->>  fun print_bool 1 !
->>    poc
->>
->>    push 70
->>    push 84
->>    call putch
->>    call waste
->>    not
->>    call waste
->>    call putch
->>
->>    call flush
+    undef print_bool__c
 
 
 >> boolean operations
@@ -79,8 +60,5 @@ fun xor 2 !
   and
   puc
 
-fun xnor 2 !
-  call xor
-  poc
-  not
-  puc
+fun xnor 2 %
+  setret (not (xor A0 A1))

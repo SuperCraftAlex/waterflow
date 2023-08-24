@@ -1,69 +1,71 @@
 use std/std
 use std/ports
+use std/comp
+use std/debug
+use std/bool
 
 
 >> simple i/o
-fun putch 1 !
-  push STDOUT
-  call io_write
+fun putch 1 %
+  io_write A0 STDOUT
 
-fun flush 0 !
-  push STDOUT
-  call io_wait
+fun flush 0 %
+  io_wait STDOUT
 
 
 >> number reverse (base 10 int)
-var reverse__sum 0
 var reverse__out 0
-
-fun reverse__loop 0 !
-  push reverse__out
-  push 10
-  mul
-
-  push reverse__sum
-  push 10
-  mod
-  
-  add
-  pop reverse__out
-
-  push reverse__sum
-  push 10
-  div
-  icv
-  pop reverse__sum
+var reverse__sum 0
 
 fun reverse 1 %
-  single 0 >reverse__out
   single A0 >reverse__sum
-  while reverse__sum reverse__loop
-  single reverse__out >R  
+  single 0 >reverse__out
+
+  while reverse__sum !
+    push reverse__out
+    push 10
+    mul
+
+    push reverse__sum
+    push 10
+    mod
+
+    add
+    pop reverse__out
+
+    push reverse__sum
+    push 10
+    div
+    icv
+    pop reverse__sum
+
+  setret reverse__out
 
 
 >> number print (base 10 int)
 var print__sum 0
 var print__digit 0
 
-fun print__loop 0 !
-  push print__sum
-  push 10
-  mod
-  push 48
-  add
-  call putch
-  push print__sum
-  push 10
-  div
-  icv
-  pop print__sum
-
 fun print 1 %
   !
     push A0
     icv
     pop print__sum
+
   reverse print__sum >print__sum
-  while print__sum print__loop
+
+  while print__sum !
+    push print__sum
+    push 10
+    mod
+    push 48
+    add
+    call putch
+    push print__sum
+    push 10
+    div
+    icv
+    pop print__sum
+
   putch 10
   flush

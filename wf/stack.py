@@ -7,8 +7,6 @@ try:
 except:
     import sys, tty, termios
     def _unix_getch():
-        """Get a single character from stdin, Unix version"""
-
         fd = sys.stdin.fileno()
         old_settings = termios.tcgetattr(fd)
         try:
@@ -154,7 +152,7 @@ def exec_stack(block, stack, pval, exec, funs, vars, consts, err):
         err("invalid amount of arguments for push instruction!")
         continue
       sp += 1
-      stack[sp] = pval(args[0])
+      stack[sp] = pval(args[0], err)
       continue
 
     if inst == "pop":
@@ -319,13 +317,17 @@ def exec_stack(block, stack, pval, exec, funs, vars, consts, err):
       elif type == "%":
         oldr = vars["R"] if "R" in vars.keys() else None
         vars["R"] = "_"
+        ovars = consts.copy()
         for i in range(fun[0]):
           if sp < 0:
             err("stack underflow! -> cant pass argument number " + str(i) + "!")
             continue
-          vars["A"+str(i)] = stack[sp]
+          consts["A"+str(i)] = stack[sp]
           sp -= 1
         exec(0, fun[2], err)
+        for var in ovars.keys():
+          if var[0] == 'A' and len(var) < 3:
+            consts[var] = ovars[var]
         if vars["R"] != "_":
           sp += 1
           stack[sp] = vars["R"]
@@ -371,7 +373,7 @@ def exec_stack(block, stack, pval, exec, funs, vars, consts, err):
       if len(args) != 1:
         err("invalid amount of arguments for magic instructuion!")
         continue
-      val = int(pval(args[0]))
+      val = int(pval(args[0], err))
       if val == 10: # port write
         if sp < 1:
           err("stack underflow! -> end of stack-block")

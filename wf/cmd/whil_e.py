@@ -7,23 +7,23 @@ def single(cmd, args, funs, vars, consts, exec_stack, exec, pval, err):
   var = args[0]
 
   if not fname in funs.keys():
-    err("Function given to \"while\" command is not defined!")
+    err("Function given to \"while\" command is not defined: " + fname + "!")
     return False
 
   fun = funs[fname]
 
   if fun[0] > 0:
-    err("Function given to \"while\" command cannot have arguments!")
+    err("Function given to \"while\" command cannot have arguments " + fname + "!")
     return False
 
   ftype = fun[1]
 
   while True:
     if not (var in vars.keys() or var in consts.keys()):
-      err("Variable given to \"while\" command is not defined!")
+      err("Variable given to \"while\" command is not defined: " + var + "!")
       return False
 
-    if pval(var) == 0:
+    if pval(var, err) == 0:
       break
 
     if ftype == "!":

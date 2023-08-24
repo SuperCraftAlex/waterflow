@@ -15,6 +15,6 @@ def single(cmd, args, funs, vars, consts, exec_stack, exec, pval, err):
     err("Cannot redefine constant \"" + name + "\"!")
     return False
 
-  consts[name] = pval(args[1])
+  consts[name] = pval(args[1], err)
 
   return True

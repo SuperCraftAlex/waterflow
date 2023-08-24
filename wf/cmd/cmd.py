@@ -9,6 +9,9 @@ import cmd.times
 import cmd.asser_t
 import cmd.ifpath
 import cmd.i_f
+import cmd.ifdef
+import cmd.retur_n
+import cmd.local
 
 cmds_single = {
   "!":           cmd.stack_exec.single,
@@ -20,6 +23,10 @@ cmds_single = {
   "times":       cmd.times.single,
   "ifpath":      cmd.ifpath.single,
   "if":          cmd.i_f.single,
+  "ifdef":       cmd.ifdef.defined,
+  "ifndef":      cmd.ifdef.notdefined,
+  "setret":      cmd.retur_n.single,
+  "local":       cmd.local.single,
 
   "assert":      cmd.asser_t.value,
   "assert_def":  cmd.asser_t.defined,

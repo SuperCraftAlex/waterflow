@@ -16,3 +16,6 @@ xor FALSE TRUE >tmp
 assert tmp TRUE
 
 print_bool tmp
+
+xnor FALSE TRUE >tmp
+assert tmp FALSE

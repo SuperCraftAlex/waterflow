@@ -7,6 +7,8 @@ def block(cmd, args, block, funs, vars, consts, exec_stack, exec, pval, err):
   argl = args[1]
 
   if name in funs.keys():
+    print("old: " + str(funs[name]))
+    print("this: " + str(block))
     err("Function \"" + name + "\" is already defined!")
     return False
 

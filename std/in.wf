@@ -3,6 +3,5 @@ use std/ports
 
 
 >> simple input
-fun getch 0 !
-  push STDIN
-  call io_read
+fun getch 0 %
+  setret (io_read STDIN)

@@ -15,3 +15,9 @@ fun div 2 !
 
 fun mod 2 !
   mod
+
+fun int 1 !
+  icv
+
+fun float 1 !
+  fcv

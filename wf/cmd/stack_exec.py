@@ -17,7 +17,7 @@ def single(cmd, args, funs, vars, consts, exec_stack, exec, pval, err):
 
     rargs.append(arg)
 
-  stack = exec_stack([" ".join(rargs)], list(map(lambda x: pval(x),ins)), pval, exec, funs, vars, consts, err)
+  stack = exec_stack([" ".join(rargs)], list(map(lambda x: pval(x, err),ins)), pval, exec, funs, vars, consts, err)
   sp = len(stack)-1
 
   for out in outs:

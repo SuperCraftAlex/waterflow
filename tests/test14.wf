@@ -1,0 +1,13 @@
+use std/debug
+use std/std
+use std/comp
+
+fun x 1 %
+  single 0
+
+x 10
+
+dump A0
+
+if (eq A0 10) %
+  dump A0

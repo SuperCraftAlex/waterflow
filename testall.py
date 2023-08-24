@@ -29,7 +29,7 @@ while True:
     proc = test[1]
     poll = proc.poll()
     if not proc.returncode is None:
-      print("test " + test[0] + " finished " + "succesfully" if proc.returncode == 0 else "with errors" + "!")
+      print("test " + test[0] + " finished " + ("succesfully" if proc.returncode == 0 else "with errors") + "!")
       if proc.returncode == 0:
         ok += 1
       else:

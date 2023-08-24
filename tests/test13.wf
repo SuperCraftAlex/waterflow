@@ -1,0 +1,23 @@
+use std/out
+use std/math
+
+print 1
+print (add 1 1)
+print (mul (add 1 4) 9)
+
+print -(mul 1 1) 1
+
+fun ret5 0 !
+  push 22
+  push 99
+  push 11
+  push 66
+  push 55
+
+fun sum5 5 !
+  add
+  add 
+  add 
+  add
+
+print (sum5 (ret5)....)

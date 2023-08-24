@@ -4,7 +4,7 @@ def single(cmd, args, funs, vars, consts, exec_stack, exec, pval, err):
     return False
 
   fname = args[1]
-  a = pval(args[0])
+  a = int(pval(args[0], err))
 
   if not fname in funs.keys():
     err("Function given to \"if\" command is not defined!")
