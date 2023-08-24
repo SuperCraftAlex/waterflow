@@ -12,7 +12,7 @@ def value(cmd, args, funs, vars, consts, exec_stack, exec, pval):
   right = vars[b] if b in vars.keys() else (consts[b] if b in consts.keys() else (funs[b] if a in funs.keys() else None))
 
   if left != right or left == None or right == None:
-    print("assert failed!")
+    print(f"assert failed: {a}, {b}!")
     return False
 
   return True
@@ -25,7 +25,7 @@ def defined(cmd, args, funs, vars, consts, exec_stack, exec, pval):
   a = args[0]
 
   if not (a in vars.keys() or a in funs.keys() or a in consts.keys()):
-    print("assert_def failed!")
+    print(f"assert_def failed: {a}!")
     return False
 
   return True
@@ -38,7 +38,7 @@ def undefined(cmd, args, funs, vars, consts, exec_stack, exec, pval):
   a = args[0]
 
   if a in vars.keys() or a in funs.keys() or a in consts.keys():
-    print("assert_ndef failed!")
+    print(f"assert_ndef failed: {a}!")
     return False
 
   return True

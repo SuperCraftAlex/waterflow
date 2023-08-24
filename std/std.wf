@@ -1,3 +1,6 @@
+var void 0
+
+
 fun single 1 !
   pass
 
@@ -7,3 +10,10 @@ fun const0 0 !
 
 fun const1 0 !
   push 1
+
+
+fun float_size 0 !
+  push 32
+
+fun int_size 0 !
+  push 32

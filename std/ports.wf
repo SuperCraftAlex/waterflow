@@ -1,0 +1,21 @@
+use std/magic
+
+const STDOUT PORT_OUT
+const STDIN PORT_IN
+
+>> io_wait [port]
+fun io_wait 1 !
+  magic MAGIC_PORT_WAIT
+
+>> io_write [value] [port]
+fun io_write 2 !
+  magic MAGIC_PORT_WRITE
+
+>> io_read [port] -> value
+fun io_read 1 !
+  magic MAGIC_PORT_READ
+
+>> io_exists [port] -> boolean
+fun io_exists 1 !
+  magic MAGIC_PORT_IS
+  puc

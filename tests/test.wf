@@ -10,7 +10,7 @@ var test 0
   add
   pop test
 
->> these was a stack oriented operation blocks ("!")
+>> this was a stack oriented operation blocks ("!")
 
 
 >> simple increment function:

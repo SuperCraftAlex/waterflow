@@ -1,0 +1,19 @@
+use std/in
+use std/out
+
+!
+  :loop
+  call getch
+  dup
+
+  push 3
+  sub
+  poc
+  jmc end
+  sec
+
+  call putch
+  call flush
+  jmc loop
+
+  :end

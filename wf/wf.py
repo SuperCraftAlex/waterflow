@@ -121,7 +121,7 @@ def exec(last_ind, lines):
           sp -= 1
         continue
       if fun[1] == "%":
-        oldr = vars["R"] if "R" in vars.keys() else False
+        oldr = vars["R"] if "R" in vars.keys() else None
         vars["R"] = 0.0
         for i, arg in enumerate(args):
           vars["A"+str(i)] = pval(arg)
@@ -134,7 +134,7 @@ def exec(last_ind, lines):
             print("cannot pop into variable: undefined variable: " + outs[0] + "!")
             continue
           vars[outs[0]] = vars["R"]
-        if oldr == False:
+        if oldr == None:
           del vars["R"]
         else:
           vars["R"] = oldr

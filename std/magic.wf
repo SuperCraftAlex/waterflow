@@ -1,4 +1,9 @@
 >> this stdlib file is defined by the compiler / transpiler / interpreter and should not be packed with other stdlib files!
 
-const MAGIC_PUTCHAR 0
-const MAGIC_FLUSH 1
+const MAGIC_PORT_WRITE 10
+const MAGIC_PORT_READ 11
+const MAGIC_PORT_IS 12
+const MAGIC_PORT_WAIT 13
+
+const PORT_OUT 0
+const PORT_IN 1

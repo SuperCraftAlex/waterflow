@@ -1,0 +1,9 @@
+use std/std
+use std/out
+
+!
+  call float_size
+  call print
+
+  call int_size
+  call print

@@ -1,0 +1,8 @@
+use std/std
+use std/ports
+
+
+>> simple input
+fun getch 0 !
+  push STDIN
+  call io_read

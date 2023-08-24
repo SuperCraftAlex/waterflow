@@ -1,13 +1,15 @@
-use std/std.wf
-use std/magic.wf
+use std/std
+use std/ports
 
 
 >> simple i/o
 fun putch 1 !
-  magic MAGIC_PUTCHAR
+  push STDOUT
+  call io_write
 
 fun flush 0 !
-  magic MAGIC_FLUSH
+  push STDOUT
+  call io_wait
 
 
 >> number reverse (base 10 int)

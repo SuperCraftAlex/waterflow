@@ -30,8 +30,6 @@ def single(cmd, args, funs, vars, consts, exec_stack, exec, pval):
 
   consts[var] = 0
 
-  oldr = vars["R"] if "R" in vars.keys() else False
-
   for i in range(int(am)):
     if not var in consts.keys():
       print("Variable given to \"times\" suddenly dissapeared!")
@@ -45,14 +43,19 @@ def single(cmd, args, funs, vars, consts, exec_stack, exec, pval):
         break
 
     elif ftype == "%":
+      oldr = vars["R"] if "R" in vars.keys() else None
       vars["R"] = 0.0
       exec(0, fun[2])
       if vars["R"] == 1:
-        if oldr == False:
+        if oldr == None:
           del vars["R"]
+        else:
+          vars["R"] = oldr
         break
-      if oldr == False:
+      if oldr == None:
         del vars["R"]
+      else:
+        vars["R"] = oldr
 
     else:
       print("Type of function \"" + name + "\" is not implemented!")

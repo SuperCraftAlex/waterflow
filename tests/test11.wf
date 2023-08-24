@@ -1,0 +1,3 @@
+use std/out
+
+print 11

@@ -1,0 +1,10 @@
+fun a 0 %
+  b
+
+fun b 0 %
+  c
+
+fun c 0 %
+  ! pass  
+
+a
