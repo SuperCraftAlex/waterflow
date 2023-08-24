@@ -4,6 +4,9 @@ var void 0
 fun single 1 !
   pass
 
+fun waste 1 !
+  poc
+
 
 fun const0 0 !
   push 0

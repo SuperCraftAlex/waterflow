@@ -1,11 +1,12 @@
 import os
 
-def single(cmd, args, funs, vars, consts, exec_stack, exec, pval):
+def single(cmd, args, funs, vars, consts, exec_stack, exec, pval, err):
   if len(args) != 1:
-    print("Invalid arguments for \"use\" command!")
+    err("Invalid arguments for \"use\" command!")
     return False
 
   x = args[0]
+  ox = x
 
   std = consts["__stdlib_path"]
 
@@ -19,12 +20,13 @@ def single(cmd, args, funs, vars, consts, exec_stack, exec, pval):
     return True
 
   if not os.path.isfile(x):
-    print("Cannot import \"" + x + "\"!")
+    err("Cannot import \"" + x + "\"!")
     return False
 
   with open(x, "r") as f:
-    exec(0, f.read().split("\n"))
+    exec(0, f.read().split("\n"), err)
 
   consts["__path"].append(x)
+  consts["__path"].append(ox.removesuffix(".wf"))
 
   return True

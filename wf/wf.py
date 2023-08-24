@@ -35,7 +35,7 @@ pval = lambda s: float(s) if is_float(s) else (vars[s] if s in vars.keys() else 
 
 gen_anon_name = lambda: "__anonymus_" + ''.join(random.sample(string.ascii_lowercase, 8))
 
-def exec(last_ind, lines):
+def exec(last_ind, lines, err):
   global vars
   global funs
 
@@ -61,15 +61,15 @@ def exec(last_ind, lines):
       block = list(map(lambda x: x[blocki:], block))
 
       if cmd in cmds_block.keys():
-        r = cmds_block[cmd](cmd, args, block[:], funs, vars, consts, exec_stack, exec, pval)
+        r = cmds_block[cmd](cmd, args, block[:], funs, vars, consts, exec_stack, exec, pval, err)
       else:
         if len(args) > 0 and cmd in cmds_single.keys():
           c = cmds_single[cmd]
           name = gen_anon_name()
           funs[name] = (-1, args[-1], block[:])
-          c(cmd, args[:-1] + [name], funs, vars, consts, exec_stack, exec, pval)
+          c(cmd, args[:-1] + [name], funs, vars, consts, exec_stack, exec, pval, err)
         else:
-          print("Command / function \"" + cmd + "\" not found!")
+          err("Command / function \"" + cmd + "\" not found!")
 
       block.clear()
 
@@ -90,7 +90,7 @@ def exec(last_ind, lines):
         continue
 
     if cmd in cmds_single.keys():
-      r = cmds_single[cmd](cmd, args, funs, vars, consts, exec_stack, exec, pval)
+      r = cmds_single[cmd](cmd, args, funs, vars, consts, exec_stack, exec, pval, err)
       continue
 
     if cmd in funs.keys():
@@ -105,17 +105,17 @@ def exec(last_ind, lines):
 
       fun = funs[cmd]
       if fun[0] != len(args):
-        print("Invalid arguments for function call " + cmd + "!")
+        err("Invalid arguments for function call " + cmd + "!")
         continue
       if fun[1] == "!":
-        stack = exec_stack(fun[2], list(map(lambda x: vars[x] if x in vars.keys() else float(x), args)), pval, exec, funs, vars, consts)
+        stack = exec_stack(fun[2], list(map(lambda x: pval(x), args)), pval, exec, funs, vars, consts, err)
         sp = len(stack) - 1
         for o in outs:
           if not o in vars.keys():
-            print("cannot pop into variable: undefined variable: " + o + "!")
+            err("cannot pop into variable: undefined variable: " + o + "!")
             continue
           if sp < 0:
-            print("cannot pop into variable: stack underflow!")
+            err("cannot pop into variable: stack underflow!")
             continue
           vars[o] = stack[sp]
           sp -= 1
@@ -125,13 +125,13 @@ def exec(last_ind, lines):
         vars["R"] = 0.0
         for i, arg in enumerate(args):
           vars["A"+str(i)] = pval(arg)
-        exec(0, fun[2])
+        exec(0, fun[2], err)
         if len(outs) > 0:
           if len(outs) != 1:
-            print("percent functions cannot return more than one value!")
+            err("percent functions cannot return more than one value!")
             continue
           if not outs[0] in vars.keys():
-            print("cannot pop into variable: undefined variable: " + outs[0] + "!")
+            err("cannot pop into variable: undefined variable: " + outs[0] + "!")
             continue
           vars[outs[0]] = vars["R"]
         if oldr == None:
@@ -139,9 +139,9 @@ def exec(last_ind, lines):
         else:
           vars["R"] = oldr
         continue
-      print("Invalid code block type " + fun[1] + " of function " + cmd + "!")
+      err("Invalid code block type " + fun[1] + " of function " + cmd + "!")
 
-    print("Command not found: " + cmd + "!")
+    err("Command not found: " + cmd + "!")
 
   if len(block) > 0:
     blocki = len(block[0]) - len(block[0].lstrip())
@@ -152,16 +152,21 @@ def exec(last_ind, lines):
     block = list(map(lambda x: x[blocki:], block))
 
     if cmd in cmds_block.keys():
-      r = cmds_block[cmd](cmd, args, block[:], funs, vars, consts, exec_stack, exec, pval)
+      r = cmds_block[cmd](cmd, args, block[:], funs, vars, consts, exec_stack, exec, pval, err)
     else:
       if len(args) > 0 and cmd in cmds_single.keys():
         c = cmds_single[cmd]
         name = gen_anon_name()
         funs[name] = (-1, args[-1], block[:])
-        c(cmd, args[:-1] + [name], funs, vars, consts, exec_stack, exec, pval)
+        c(cmd, args[:-1] + [name], funs, vars, consts, exec_stack, exec, pval, err)
       else:
-        print("Command / function \"" + cmd + "\" not found!")
+        err("Command / function \"" + cmd + "\" not found!")
 
     block.clear()
 
-exec(0, txt.split("\n"))
+def error(x):
+  sys.stderr.write(x)
+  sys.stderr.flush()
+  sys.exit(1)
+
+exec(0, txt.split("\n"), error)

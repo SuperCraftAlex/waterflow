@@ -15,14 +15,3 @@ fun div 2 !
 
 fun mod 2 !
   mod
-
-
-fun eq 2 !
-  sub
-  poc
-  not
-  puc
-
-fun neq 2 !
-  sub
-

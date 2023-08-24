@@ -1,0 +1,86 @@
+use std/std
+use std/comp
+
+
+const TRUE 1
+const FALSE 0
+
+
+>> print booleans
+ifpath std/out %
+  fun print_bool 1 %
+    var print_bool__eq
+    var print_bool__neq
+
+    eq A0 1 >print_bool__eq
+    not print_bool__eq >print_bool__neq
+
+    if print_bool__eq %
+      putch 84
+    if print_bool__neq %
+      putch 70
+    flush
+
+    undef print_bool__eq
+    undef print_bool__neq
+
+>>  fun print_bool 1 !
+>>    poc
+>>
+>>    push 70
+>>    push 84
+>>    call putch
+>>    call waste
+>>    not
+>>    call waste
+>>    call putch
+>>
+>>    call flush
+
+
+>> boolean operations
+fun and 2 !
+  poc
+  and
+  puc
+
+fun or 2 !
+  poc
+  or
+  puc
+
+fun not 1 !
+  poc
+  not
+  puc
+
+fun nand 2 !
+  poc
+  and
+  not
+  puc
+
+fun nor 2 !
+  poc
+  or
+  not
+  puc
+
+fun xor 2 !
+  poc
+  dup
+  puc
+  swp
+  
+  and
+  not
+  
+  call or
+  and
+  puc
+
+fun xnor 2 !
+  call xor
+  poc
+  not
+  puc

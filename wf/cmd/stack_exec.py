@@ -1,6 +1,6 @@
-def single(cmd, args, funs, vars, consts, exec_stack, exec, pval):
+def single(cmd, args, funs, vars, consts, exec_stack, exec, pval, err):
   if len(args) == 0:
-    print("Not enought arguments for \"!\" (single) command!")
+    err("Not enought arguments for \"!\" (single) command!")
     return False
 
   rargs = []
@@ -17,20 +17,20 @@ def single(cmd, args, funs, vars, consts, exec_stack, exec, pval):
 
     rargs.append(arg)
 
-  stack = exec_stack([" ".join(rargs)], list(map(lambda x: pval(x),ins)), pval, exec, funs, vars, consts)
+  stack = exec_stack([" ".join(rargs)], list(map(lambda x: pval(x),ins)), pval, exec, funs, vars, consts, err)
   sp = len(stack)-1
 
   for out in outs:
     if sp < 0:
-      print("Cannot pop more values from stack in \"!\" (single) command!")
+      err("Cannot pop more values from stack in \"!\" (single) command!")
       return False
 
     if out in consts.keys():
-      print("Cannot pop into constant!")
+      err("Cannot pop into constant!")
       return False
 
     if not out in vars.keys():
-      print("Cannot pop into undefined variable!")
+      err("Cannot pop into undefined variable!")
       return False
 
     vars[out] = stack[sp]
@@ -39,10 +39,10 @@ def single(cmd, args, funs, vars, consts, exec_stack, exec, pval):
   return True
 
 
-def block(cmd, args, block, funs, vars, consts, exec_stack, exec, pval):
+def block(cmd, args, block, funs, vars, consts, exec_stack, exec, pval, err):
   if len(args) != 0:
-    print("Too many arguments for \"!\" command!")
+    err("Too many arguments for \"!\" command!")
     return False
 
-  exec_stack(block, [], pval, exec, funs, vars, consts)
+  exec_stack(block, [], pval, exec, funs, vars, consts, err)
   return True

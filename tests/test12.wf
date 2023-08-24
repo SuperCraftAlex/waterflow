@@ -1,0 +1,18 @@
+use std/out
+use std/bool
+
+var tmp
+
+xor FALSE FALSE >tmp
+assert tmp FALSE
+
+xor TRUE TRUE >tmp
+assert tmp FALSE
+
+xor TRUE FALSE >tmp
+assert tmp TRUE
+
+xor FALSE TRUE >tmp
+assert tmp TRUE
+
+print_bool tmp

@@ -7,6 +7,8 @@ import cmd.const
 import cmd.whil_e
 import cmd.times
 import cmd.asser_t
+import cmd.ifpath
+import cmd.i_f
 
 cmds_single = {
   "!":           cmd.stack_exec.single,
@@ -16,6 +18,8 @@ cmds_single = {
   "const":       cmd.const.single,
   "while":       cmd.whil_e.single,
   "times":       cmd.times.single,
+  "ifpath":      cmd.ifpath.single,
+  "if":          cmd.i_f.single,
 
   "assert":      cmd.asser_t.value,
   "assert_def":  cmd.asser_t.defined,

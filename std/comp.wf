@@ -1,0 +1,8 @@
+fun eq 2 !
+  sub
+  poc
+  not
+  puc
+
+fun neq 2 !
+  sub

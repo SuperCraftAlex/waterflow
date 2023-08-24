@@ -20,9 +20,7 @@ except:
 
     getch = _unix_getch
 
-def exec_stack(block, stack, pval, exec, funs, vars, consts):
-  err = print
-
+def exec_stack(block, stack, pval, exec, funs, vars, consts, err):
   cond = 1.0
 
   # sp points to the current top element in the stack
@@ -315,7 +313,7 @@ def exec_stack(block, stack, pval, exec, funs, vars, consts):
       fun = funs[args[0]]
       type = fun[1]
       if type == "!":
-        stack = exec_stack(fun[2], stack[:sp+1], pval, exec, funs, vars, consts)
+        stack = exec_stack(fun[2], stack[:sp+1], pval, exec, funs, vars, consts, err)
         sp = len(stack) - 1
         stack += [0.0] * (255 - len(stack))
       elif type == "%":
@@ -327,7 +325,7 @@ def exec_stack(block, stack, pval, exec, funs, vars, consts):
             continue
           vars["A"+str(i)] = stack[sp]
           sp -= 1
-        exec(0, fun[2])
+        exec(0, fun[2], err)
         if vars["R"] != "_":
           sp += 1
           stack[sp] = vars["R"]

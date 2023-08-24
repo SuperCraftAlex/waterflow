@@ -1,6 +1,6 @@
-def single(cmd, args, funs, vars, consts, exec_stack, exec, pval):
+def single(cmd, args, funs, vars, consts, exec_stack, exec, pval, err):
   if len(args) != 1:
-    print("Invalid arguments for \"undef\" command!")
+    err("Invalid arguments for \"undef\" command!")
     return False
 
   x = args[0]

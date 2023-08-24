@@ -1,8 +1,8 @@
 import os
 
-def value(cmd, args, funs, vars, consts, exec_stack, exec, pval):
+def value(cmd, args, funs, vars, consts, exec_stack, exec, pval, err):
   if len(args) != 2:
-    print("Invalid arguments for \"assert\" command!")
+    err("Invalid arguments for \"assert\" command!")
     return False
 
   a = args[0]
@@ -12,33 +12,33 @@ def value(cmd, args, funs, vars, consts, exec_stack, exec, pval):
   right = vars[b] if b in vars.keys() else (consts[b] if b in consts.keys() else (funs[b] if a in funs.keys() else None))
 
   if left != right or left == None or right == None:
-    print(f"assert failed: {a}, {b}!")
+    err(f"assert failed: {a}, {b}!")
     return False
 
   return True
 
-def defined(cmd, args, funs, vars, consts, exec_stack, exec, pval):
+def defined(cmd, args, funs, vars, consts, exec_stack, exec, pval, err):
   if len(args) != 1:
-    print("Invalid arguments for \"assert\" command!")
+    err("Invalid arguments for \"assert\" command!")
     return False
 
   a = args[0]
 
   if not (a in vars.keys() or a in funs.keys() or a in consts.keys()):
-    print(f"assert_def failed: {a}!")
+    err(f"assert_def failed: {a}!")
     return False
 
   return True
 
-def undefined(cmd, args, funs, vars, consts, exec_stack, exec, pval):
+def undefined(cmd, args, funs, vars, consts, exec_stack, exec, pval, err):
   if len(args) != 1:
-    print("Invalid arguments for \"assert\" command!")
+    err("Invalid arguments for \"assert\" command!")
     return False
 
   a = args[0]
 
   if a in vars.keys() or a in funs.keys() or a in consts.keys():
-    print(f"assert_ndef failed: {a}!")
+    err(f"assert_ndef failed: {a}!")
     return False
 
   return True
